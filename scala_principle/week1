@@ -1,0 +1,66 @@
+1.2 Elements of programming
+	- call by value:
+		i. eval arguments from left to right.
+		ii. replace function application by its RHS. replace the formal params of the function by the actual arguments.
+			- advantage: eval function argument only once
+	- call by name
+		i. first replace function
+		ii. then eval arguments
+			- advantange: don't eval if the param is unused
+e.g.
+def test(x: Int, y: Int) = x * x
+test(2,3)
+CBV: 2 * 2 , 4
+CBN: 2 * 2, 4
+
+test(3+4,8)
+CBV: test(7,8), 7*7,49
+CBN: 3+4 * 3+4, 7* (3+4), 7*7, 49
+test(7, 2*4)
+CBV: test(7, 2*4), test(7,8), 7*7, 49
+CBN: 7*7, 49
+
+1.3
+	- what if not terminates?
+		- if CBV terminates, then CBN terminates.
+		- other direction is not true.
+			e.g. def first(x: Int, y: Int) = x
+				consider first(1, loop)
+			# this way we needs to reduce loop first and that would make an infinite loop
+	- scala strategy:
+		- usually call-by-value. because quick. avoids argument recomputation.
+		- force CBN:
+			def constOne(x:Int, y: => Int) = 1
+			# meaning that y is forced to be CBN
+
+			e.g. constOne(1+2, loop), constOne(3, loop), 1....
+			e.g. constOne(loop, 1+2), loop
+
+1.4 Conditionals and Value definitions
+	e.g.:
+		def abs(x: Int) = if (x >= 0) x else -x
+		# if, else are expressions instead of statements.
+		# sometimes we don't need the RHS to evaluate the value => short-circuit eval
+	rewrite rules for if & else
+		if (b) e1 else e2
+			if (true) e1 else e2 -> e1
+			if (false) e1 else e2 -> e2
+
+	for definition, also we have CBN and CBV
+	def form is "by-name". right hand side is evaluated on each use.
+	val is by-value.
+		e.g val x = 2, val y = square(x). RHS is evaluated at the point of definition itself.
+		e.g. def loop: Boolean = loop
+		def x = loop is OK, but val x = loop will lead to an infinite loop.
+
+1.5 Newton method
+	# recursive functions in scala need an explicit return type
+	def sqrtIter(guess: Double, x: Double): Double =
+		if (isGoodEough(guess, x)) guess
+		else sqrtIter(improve(guess, x), x)
+
+1.6. Block and lexical scoping
+	blocks:
+	last line of block is the return value of block.
+	definition within a block is only visible to the block.
+	inner val shadows the outer block.
