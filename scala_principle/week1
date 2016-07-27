@@ -64,3 +64,13 @@ CBN: 7*7, 49
 	last line of block is the return value of block.
 	definition within a block is only visible to the block.
 	inner val shadows the outer block.
+
+	semicolons:
+	you could have a semicolon, or you can have several of them in one line.
+
+	how to write multi-line statements?
+	use a (), or write the operator at the end of the first line.
+
+1.7 tail recursion
+	- If a function calls itself at the very last then its stack is essentially a stack for a loop.
+	- Otherwise it is not. e.g. factorial:
